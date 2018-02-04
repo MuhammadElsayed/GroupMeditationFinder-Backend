@@ -86,6 +86,8 @@ function getUser(req, res) {
             .catch(function (err) {
                 res.status(400).send({error_code:1, msg:err});
             });
+    } else {
+        res.status(400).send({error_code:1, msg:"Not authorized!"});
     }
 }
 
