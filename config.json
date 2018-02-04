@@ -1,4 +1,6 @@
 {
   "connectionString": "mongodb://mwa-user:mwa-pass@54.209.64.120:27017/mwa_db",
-  "secret": "GMF_MWA_JWT_SECRET"
+  "secret": "GMF_MWA_JWT_SECRET",
+  "saltLength": 10,
+  "passwordMinLength": 5
 }
