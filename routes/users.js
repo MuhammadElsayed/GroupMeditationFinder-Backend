@@ -24,11 +24,6 @@ const authChecker = [
         .isEmail().withMessage('Invalid email!')
         .trim()
         .normalizeEmail()
-    ,
-
-    check('password', 'Invalid password')
-        .isLength({ min: config.passwordMinLength })
-        .matches(/\d/)
 ];
 
 router.post('/auth', authChecker, authenticate);
