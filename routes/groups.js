@@ -60,4 +60,60 @@ router.delete('/:id', function(req, res, next) {
 });
 
 
+router.get('/nearby', (req,res,next) => {
+    let lng = req.query.lng;
+    let lat = req.query.lat;
+    console.log(lng);
+    Group.find({geolocation: {$near:[lng,lat]}}).limit(10).then((data)=>{     
+        res.status(200).json(data);
+    });
+})
+
+
+router.post('/join', (req,res,next) => {
+    if (req.headers && req.headers.authorization) {
+        userService.getByJWT(req.headers.authorization.replace(/^Bearer\s/, ''))
+            .then(function (user) {
+                //join query
+
+            })
+            .catch(function (err) {
+                res.status(400).send({error_code:1, msg:err});
+            });
+    } else {
+        res.status(400).send({error_code:1, msg:"Not authorized!"});
+    }
+});
+
+router.post('/leave', (req,res,next) => {
+    if (req.headers && req.headers.authorization) {
+        userService.getByJWT(req.headers.authorization.replace(/^Bearer\s/, ''))
+            .then(function (user) {
+                //leave query
+
+            })
+            .catch(function (err) {
+                res.status(400).send({error_code:1, msg:err});
+            });
+    } else {
+        res.status(400).send({error_code:1, msg:"Not authorized!"});
+    }
+});
+
+router.post('/registered', (req,res,next) => {
+    if (req.headers && req.headers.authorization) {
+        userService.getByJWT(req.headers.authorization.replace(/^Bearer\s/, ''))
+            .then(function (user) {
+                //get registered groups by user.
+
+            })
+            .catch(function (err) {
+                res.status(400).send({error_code:1, msg:err});
+            });
+    } else {
+        res.status(400).send({error_code:1, msg:"Not authorized!"});
+    }
+});
+
+
 module.exports = router;

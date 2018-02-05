@@ -8,6 +8,8 @@ var lessMiddleware = require('less-middleware');
 
 var users = require('./routes/users');
 
+var groups = require('./routes/groups');
+
 var app = express();
 
 // view engine setup
@@ -24,6 +26,7 @@ app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/users', users);
+app.use('/api/groups', groups);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
