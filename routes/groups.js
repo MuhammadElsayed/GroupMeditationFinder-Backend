@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
         })
 });
 
-router.get('/find/:id', function(req, res, next) {
+router.get('/:id([0-9a-f]{24})', function(req, res, next) {
     Group.find({_id: req.params.id})
         .exec(function(err, results) {
             console.log(results)
@@ -47,7 +47,7 @@ router.post('/', function(req, res, next) {
     })
 });
 
-router.put('/:id', function(req, res, next) {
+router.put('/:id([0-9a-f]{24})', function(req, res, next) {
     var group = new Group(req.body)
     group.updateDate = new Date();
     console.log(req.body)
@@ -60,7 +60,7 @@ router.put('/:id', function(req, res, next) {
 });
 
 
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id([0-9a-f]{24})', function(req, res, next) {
     Group.remove({ _id:  req.params.id }, function (err) {
         if (err) throw err
         res.json({error_code:0})
