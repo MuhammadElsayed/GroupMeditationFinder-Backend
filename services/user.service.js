@@ -5,6 +5,7 @@ var Q = require('q');
 
 var config = require('../config');
 var User = require('../models/users');
+var AdminKey = require('../models/adminKey');
 
 var service = {};
 
@@ -22,27 +23,56 @@ function create(userParam) {
     // check if the user already in our system
     User.findOne(
         { email: userParam.email },
-        function (err, user) {
+        (err, user) => {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
-            if (user) {
-                // email already exists
+            if (user) { // email already exists
                 deferred.reject('Email "' + userParam.email + '" is already in our system!');
             } else {
-                // remove password from user params, to be hashed (with salt length)
-                var user = _.assign(new User(),  _.omit(userParam, 'password'));
-                user.password = bcrypt.hashSync(userParam.password, config.saltLength);
 
-                console.log(user);
-                user.save(
-                    function (err, doc) {
-                        if (err) deferred.reject(err.name + ': ' + err.message);
+                if (userParam.role && userParam.role === 'admin') { // Admin registration
+                    console.log('---------');
+                    console.log(userParam);
+                    console.log('---------');
+                    if (userParam.adminkey) {
+                        AdminKey.findOne(
+                            { key: userParam.adminkey },
+                            (err, key) => {
+                                if (err) deferred.reject(err.name + ': ' + err.message);
+                                if (key) {
+                                    //this key is valid, then let's complete the admin registration
+                                    saveUser(userParam);
+                                } else {
+                                    deferred.reject('This is invalid admin key!');
+                                }
+                            });
 
-                        //@TODO: generate activation token and sent it to this mail
-                        deferred.resolve();
-                    });
+                    } else {
+                        deferred.reject('You have to insert a valid admin key!');
+                    }
+                } else {
+                    saveUser(userParam);
+                }
+
             }
         });
+
+    // To save the user data after [VALIDATED DATA]
+    function saveUser(userParam) {
+
+        // remove password from user params, to be hashed (with salt length)
+        var user = _.assign(new User(),  _.omit(userParam, 'password'));
+        user.password = bcrypt.hashSync(userParam.password, config.saltLength);
+
+        console.log(user);
+        user.save(
+            function (err, doc) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+
+                //@TODO: generate activation token and sent it to this mail
+                deferred.resolve();
+            });
+    }
 
     return deferred.promise;
 }
