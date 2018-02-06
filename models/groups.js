@@ -1,6 +1,7 @@
 var mongoose = require('mongoose')
+var config = require('../config.json');
 
-mongoose.connect('mongodb://mwa-user:mwa-pass@54.209.64.120:27017/mwa_db');
+mongoose.connect(config.connectionString);
 
 
 //http://mongoosejs.com/docs/api.html
