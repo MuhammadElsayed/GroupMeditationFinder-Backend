@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
         })
 });
 
-router.get('/:id', function(req, res, next) {
+router.get('/find/:id', function(req, res, next) {
     Group.find({_id: req.params.id})
         .exec(function(err, results) {
             console.log(results)
@@ -69,14 +69,11 @@ router.delete('/:id', function(req, res, next) {
 
 
 router.get('/nearby', (req,res,next) => {
-    console.log(req);
     let lng = req.query.lng;
     let lat = req.query.lat;
     console.log(lng);
     Group.find({geolocation: {$near:[lng,lat]}}).limit(10).then((data)=>{     
         res.status(200).json(data);
-    }).catch((err) => {
-        console.log(err)
     });
 })
 
@@ -124,7 +121,7 @@ router.post('/leave', (req,res,next) => {
     }
 });
 
-router.post('/registered', (req,res,next) => {
+router.get('/registered', (req,res,next) => {
     if (req.headers && req.headers.authorization) {
         userService.getByJWT(req.headers.authorization.replace(/^Bearer\s/, ''))
             .then(function (user) {
@@ -134,12 +131,11 @@ router.post('/registered', (req,res,next) => {
                 });
             })
             .catch(function (err) {
-                res.status(400).send({error_code:1, msg:err});
+                res.status(500).send({error_code:1, msg:err});
             });
     } else {
         res.status(400).send({error_code:1, msg:"Not authorized!"});
     }
 });
-
 
 module.exports = router;
