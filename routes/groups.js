@@ -69,11 +69,14 @@ router.delete('/:id', function(req, res, next) {
 
 
 router.get('/nearby', (req,res,next) => {
+    console.log(req);
     let lng = req.query.lng;
     let lat = req.query.lat;
     console.log(lng);
     Group.find({geolocation: {$near:[lng,lat]}}).limit(10).then((data)=>{     
         res.status(200).json(data);
+    }).catch((err) => {
+        console.log(err)
     });
 })
 

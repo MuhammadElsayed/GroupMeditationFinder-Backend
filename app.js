@@ -6,13 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var lessMiddleware = require('less-middleware');
 var cors = require('cors')
-var app = express()
-
 var users = require('./routes/users');
 var groups = require('./routes/groups');
-
-var groups = require('./routes/groups');
-
 var app = express();
 
 // view engine setup
@@ -29,7 +24,7 @@ app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use(cors())
+app.use(cors());
 app.use('/api/users', users);
 app.use('/api/groups', groups);
 
@@ -53,6 +48,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(3000)
+app.listen(3000);
 
 module.exports = app;
