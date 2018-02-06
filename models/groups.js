@@ -15,12 +15,16 @@ var groupSchema = new mongoose.Schema({
     state : String,
   },
   geolocation:[Number],
-  users: [String],
+  users: [{
+    name: String,
+    joinDate: Date
+  }],
   isEveryday : Boolean,
   createDate: Date,
   updateDate: Date,
 }, {
   versionKey: false // You should be aware of the outcome after set to false
-})
+});
+groupSchema.index({geolocation: '2d'});
 
 module.exports = mongoose.model('Group', groupSchema, 'groups')
