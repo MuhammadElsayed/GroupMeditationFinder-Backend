@@ -9,9 +9,18 @@ var groupSchema = new mongoose.Schema({
   name: String,
   description: String,
   datetime: Date,
-  address: String,
+  address: {
+    street: String,
+    city : String,
+    state : String,
+  },
   geolocation:[Number],
-  users: [String]
+  users: [String],
+  isEveryday : Boolean,
+  createDate: Date,
+  updateDate: Date,
+}, {
+  versionKey: false // You should be aware of the outcome after set to false
 })
 
 module.exports = mongoose.model('Group', groupSchema, 'groups')
