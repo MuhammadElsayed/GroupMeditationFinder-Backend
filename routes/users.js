@@ -24,11 +24,6 @@ const authChecker = [
         .isEmail().withMessage('Invalid email!')
         .trim()
         .normalizeEmail()
-    ,
-
-    check('password', 'Invalid password')
-        .isLength({ min: config.passwordMinLength })
-        .matches(/\d/)
 ];
 
 router.post('/auth', authChecker, authenticate);
@@ -50,7 +45,7 @@ function authenticate(req, res) {
             if (user) { //authenticated
                 res.send(user);
             } else {
-                res.status(400).send('Email or password is incorrect');
+                res.status(400).send({error_code:1, msg:'Email or password is incorrect'});
             }
         })
         .catch(function (err) {

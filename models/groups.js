@@ -1,6 +1,7 @@
 var mongoose = require('mongoose')
+var config = require('../config.json');
 
-mongoose.connect('mongodb://mwa-user:mwa-pass@54.209.64.120:27017/mwa_db');
+mongoose.connect(config.connectionString);
 
 
 //http://mongoosejs.com/docs/api.html
@@ -11,20 +12,20 @@ var groupSchema = new mongoose.Schema({
   datetime: Date,
   address: {
     street: String,
-    city: String,
-    state: String
+    city : String,
+    state : String,
   },
   geolocation:[Number],
   users: [{
     name: String,
     joinDate: Date
-  }]
+  }],
+  isEveryday : Boolean,
+  createDate: Date,
+  updateDate: Date,
+}, {
+  versionKey: false // You should be aware of the outcome after set to false
 });
-
 groupSchema.index({geolocation: '2d'});
-// groupSchema.pre('save',(next) => {
-//     var currentDate = new Date();
-//     this.
-// })
 
 module.exports = mongoose.model('Group', groupSchema, 'groups')
