@@ -9,12 +9,12 @@ var AdminKey = require('../models/adminKey');
 
 var service = {};
 
-service.create = create;
-service.authenticate = authenticate;
-service.activate = activate;
-service.getByJWT = getByJWT;
-service.update = update;
-service.addKey = addKey;
+service.create = create; // create new user
+service.authenticate = authenticate; // authenticate the user
+service.activate = activate; // activate the user account
+service.getByJWT = getByJWT; // read the user data from JWT
+service.update = update; // update the user data
+service.addKey = addKey; // add admin's key
 
 module.exports = service;
 
