@@ -88,6 +88,7 @@ function authenticate(email, password) {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
                 token: jwt.sign({ id: user._id }, config.secret)
             });
         } else {
