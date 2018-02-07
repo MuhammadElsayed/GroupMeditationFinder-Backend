@@ -28,6 +28,7 @@ const authChecker = [
 
 router.post('/auth', authChecker, authenticate);
 router.post('/register', registerChecker, register);
+router.post('/addkey', addKey);
 router.get('/user', getUser); //this read the user from his token
 router.put('/:_id', update);
 
@@ -60,6 +61,17 @@ function register(req, res) {
         return res.status(422).json({ errors: errors.mapped() });
     }
     userService.create(req.body)
+        .then(function () {
+            res.json({error_code:0});
+        })
+        .catch(function (err) {
+            res.status(400).send({error_code:1, msg:err});
+        });
+}
+
+function addKey(req, res) {
+    console.log(req.body);
+    userService.addKey(req.body)
         .then(function () {
             res.json({error_code:0});
         })
