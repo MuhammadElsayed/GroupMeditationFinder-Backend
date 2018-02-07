@@ -14,6 +14,7 @@ service.authenticate = authenticate;
 service.activate = activate;
 service.getByJWT = getByJWT;
 service.update = update;
+service.addKey = addKey;
 
 module.exports = service;
 
@@ -169,5 +170,32 @@ function update(_id, userParam) {
     } catch (e) {
         deferred.reject(e.name + ': ' + e.message);
     }
+    return deferred.promise;
+}
+
+
+
+function addKey(keyParam) {
+    var deferred = Q.defer();
+
+    // check if the key already in our system
+    AdminKey.findOne(
+        { key: keyParam.key },
+        (err, key) => {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+
+            if (key) { // key already exists
+                deferred.reject('This key "' + keyParam.key + '" is already in our system!');
+            } else {
+                var adminKey = _.assign(new AdminKey(), keyParam);
+                adminKey.save(
+                    function (err, doc) {
+                        if (err) deferred.reject(err.name + ': ' + err.message);
+                        deferred.resolve();
+                    });
+
+            }
+        });
+
     return deferred.promise;
 }
