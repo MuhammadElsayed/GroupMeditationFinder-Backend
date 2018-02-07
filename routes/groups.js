@@ -18,7 +18,8 @@ router.get('/', function(req, res, next) {
                 function(err, count) {
                     console.log(results)
                     console.log(count)
-                    res.json({error_code:0, data:results, total:count})
+                    if (err) res.status(500).send({error_code:1, msg:err});
+                    else res.status(200).json({error_code:0, data:results, total:count})
                 }
             )            
         })
@@ -28,7 +29,8 @@ router.get('/:id([0-9a-f]{24})', function(req, res, next) {
     Group.find({_id: req.params.id})
         .exec(function(err, results) {
             console.log(results)
-            res.json(results)
+            if (err) res.status(500).send({error_code:1, msg:err});
+            else res.status(200).json(results)
         })
 });
 
@@ -42,8 +44,8 @@ router.post('/', function(req, res, next) {
 
     console.log(group)
     group.save(function(err) {
-        if (err) throw err
-        res.json({error_code:0, _id: group._id})
+        if (err) res.status(500).send({error_code:1, msg:err});
+        else res.status(200).json({error_code:0, _id: group._id})
     })
 });
 
@@ -54,16 +56,16 @@ router.put('/:id([0-9a-f]{24})', function(req, res, next) {
     console.log(group)
 
     Group.findOneAndUpdate({ _id:  req.params.id }, group,  function (err) {
-        if (err) throw err
-        res.json({error_code:0, _id: group._id})
+        if (err) res.status(500).send({error_code:1, msg:err});
+        else res.status(200).json({error_code:0, _id: group._id})
       });
 });
 
 
 router.delete('/:id([0-9a-f]{24})', function(req, res, next) {
     Group.remove({ _id:  req.params.id }, function (err) {
-        if (err) throw err
-        res.json({error_code:0})
+        if (err) res.status(500).send({error_code:1, msg:err});
+        else res.status(200).json({error_code:0})
       });
 });
 
